@@ -14,28 +14,51 @@ on:
 jobs:
   review:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
 
-      - uses: shivammathur/setup-php@v2
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ inputs.php }}
           tools: composer
 
-      - name: Install coding standards
+      # Install PHPCS + WPCS in an isolated tools dir (does not depend on project composer.json)
+      - name: Setup PHPCS toolchain
         run: |
-          composer config --no-interaction allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          mkdir -p tools && cd tools
+          composer init -n
           composer require --no-interaction --no-progress --dev \
-            dealerdirect/phpcodesniffer-composer-installer:"^1.0" \
-            squizlabs/php_codesniffer:"^3.7" \
-            wp-coding-standards/wpcs:"^3.0"
+            squizlabs/php_codesniffer:^3.7 \
+            dealerdirect/phpcodesniffer-composer-installer:^1.0 \
+            wp-coding-standards/wpcs:^3.0
+          echo "$PWD/vendor/bin" >> $GITHUB_PATH
 
+      # Optional: if the target repo *does* have composer.json, install its deps (won't fail build)
       - name: Install project deps (optional)
-        run: composer install --no-interaction --no-progress || true
+        run: |
+          if [ -f composer.json ]; then
+            composer install --no-interaction --no-progress || true
+          fi
 
-      - name: Run PHPCS (WordPress standard)
-        run: ./vendor/bin/phpcs --standard=${{ inputs.standard }} --extensions=php .
+      - name: Run PHPCS and save report
+        run: |
+          phpcs \
+            --standard=${{ inputs.standard }} \
+            --extensions=php \
+            --report=full \
+            --report-file=phpcs.txt \
+            .
+
+      - name: Upload PHPCS report
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpcs-report
+          path: phpcs.txt
 
       - name: Summary
         run: echo "Greg reusable review completed." >> $GITHUB_STEP_SUMMARY
