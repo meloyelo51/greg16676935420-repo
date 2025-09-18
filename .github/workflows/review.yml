@@ -21,18 +21,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Hub version marker
+        run: echo "Hub workflow version: 2025-09-18-03"
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ inputs.php }}
           tools: composer
 
-      # Install PHPCS + WPCS in an isolated tools dir
+      # Isolated PHPCS/WPCS toolchain (does NOT depend on project's composer.json)
       - name: Setup PHPCS toolchain
         run: |
           mkdir -p tools && cd tools
           composer init -n --name temp/tools --type library
-          # Allow the Composer plugin so it can register installed_paths
           composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
           composer require --no-interaction --no-progress --dev \
             squizlabs/php_codesniffer:^3.7 \
@@ -40,27 +42,55 @@ jobs:
             wp-coding-standards/wpcs:^3.0
           echo "$PWD/vendor/bin" >> $GITHUB_PATH
 
-      # Optional: install project deps if present (won't fail build)
+      # Optional: if target repo has composer.json, install quietly (won't fail build)
       - name: Install project deps (optional)
         run: |
           if [ -f composer.json ]; then
             composer install --no-interaction --no-progress || true
           fi
 
-      - name: Run PHPCS and save report
+      # PHPCS on plugin only; ignore backups; never fail job so we always get a report
+      - name: Run PHPCS on plugin only (never fail)
         run: |
+          TARGET_PATH="wp-content/plugins/wp-ai-commercehub"
           phpcs \
             --standard=${{ inputs.standard }} \
             --extensions=php \
+            --ignore="**/dist/**,**/backup/**,**/old/**,**/archives/**,**/vendor/**" \
             --report=full \
             --report-file=phpcs.txt \
-            .
+            "$TARGET_PATH" || true
 
-      - name: Upload PHPCS report
+        - name: Run PHPCS and save report (never fail)
+        run: |
+          phpcs \
+            --standard=WordPress \
+            --extensions=php \
+            --report=full \
+            --report-file=phpcs.txt \
+            . || true
+
+      - name: Append top of report to job summary
+        run: |
+          echo "### PHPCS Report (first 200 lines)" >> $GITHUB_STEP_SUMMARY
+          head -n 200 phpcs.txt >> $GITHUB_STEP_SUMMARY || echo "No report content."
+
+      - name: Upload full PHPCS report
         uses: actions/upload-artifact@v4
         with:
           name: phpcs-report
           path: phpcs.txt
 
-      - name: Summary
-        run: echo "Greg reusable review completed." >> $GITHUB_STEP_SUMMARY
+
+            
+
+      - name: Append top of report to job summary
+        run: |
+          echo "### PHPCS Report (first 200 lines)" >> $GITHUB_STEP_SUMMARY
+          head -n 200 phpcs.txt >> $GITHUB_STEP_SUMMARY || echo "No report content."
+
+      - name: Upload full PHPCS report
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpcs-report
+          path: phpcs.txt
