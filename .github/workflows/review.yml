@@ -27,18 +27,20 @@ jobs:
           php-version: ${{ inputs.php }}
           tools: composer
 
-      # Install PHPCS + WPCS in an isolated tools dir (does not depend on project composer.json)
+      # Install PHPCS + WPCS in an isolated tools dir
       - name: Setup PHPCS toolchain
         run: |
           mkdir -p tools && cd tools
           composer init -n --name temp/tools --type library
+          # Allow the Composer plugin so it can register installed_paths
+          composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
           composer require --no-interaction --no-progress --dev \
             squizlabs/php_codesniffer:^3.7 \
             dealerdirect/phpcodesniffer-composer-installer:^1.0 \
             wp-coding-standards/wpcs:^3.0
           echo "$PWD/vendor/bin" >> $GITHUB_PATH
 
-      # Optional: if the target repo *does* have composer.json, install its deps (won't fail build)
+      # Optional: install project deps if present (won't fail build)
       - name: Install project deps (optional)
         run: |
           if [ -f composer.json ]; then
