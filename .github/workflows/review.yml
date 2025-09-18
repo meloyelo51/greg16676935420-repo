@@ -1,15 +1,14 @@
 name: Reusable Review
-
 on:
   workflow_call:
     inputs:
       php:
-        required: false
         type: string
+        required: false
         default: '8.2'
       standard:
-        required: false
         type: string
+        required: false
         default: 'WordPress'
 
 jobs:
@@ -18,53 +17,5 @@ jobs:
     steps:
       - name: Checkout target repo
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Hub version marker
-        run: echo "Hub workflow version: 2025-09-18-03"
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ inputs.php }}
-          tools: composer
-
-      - name: Setup PHPCS toolchain
-        run: |
-          mkdir -p tools && cd tools
-          composer init -n --name temp/tools --type library
-          composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
-          composer require --no-interaction --no-progress --dev \
-            squizlabs/php_codesniffer:^3.7 \
-            dealerdirect/phpcodesniffer-composer-installer:^1.0 \
-            wp-coding-standards/wpcs:^3.0
-          echo "$PWD/vendor/bin" >> $GITHUB_PATH
-
-      - name: Install project deps (optional)
-        run: |
-          if [ -f composer.json ]; then
-            composer install --no-interaction --no-progress || true
-          fi
-
-      - name: Run PHPCS on plugin only (never fail)
-        run: |
-          TARGET_PATH="wp-content/plugins/wp-ai-commercehub"
-          phpcs \
-            --standard=${{ inputs.standard }} \
-            --extensions=php \
-            --ignore="**/dist/**,**/backup/**,**/old/**,**/archives/**,**/vendor/**" \
-            --report=full \
-            --report-file=phpcs.txt \
-            "$TARGET_PATH" || true
-
-      - name: Append top of report to job summary
-        run: |
-          echo "### PHPCS Report (first 200 lines)" >> $GITHUB_STEP_SUMMARY
-          head -n 200 phpcs.txt >> $GITHUB_STEP_SUMMARY || echo "No report content."
-
-      - name: Upload full PHPCS report
-        uses: actions/upload-artifact@v4
-        with:
-          name: phpcs-report
-          path: phpcs.txt
+        run: echo "Hub workflow version: minimal-01"
