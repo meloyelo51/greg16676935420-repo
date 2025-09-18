@@ -1,0 +1,33 @@
+name: Reusable Review
+on:
+  workflow_call:
+    inputs:
+      php:
+        required: false
+        type: string
+        default: '8.2'
+      standard:
+        required: false
+        type: string
+        default: 'WordPress'
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php }}
+          tools: composer, phpcs
+      - name: Install coding standards
+        run: |
+          composer require --no-interaction --no-progress --dev \
+            dealerdirect/phpcodesniffer-composer-installer:"^1.0" \
+            wp-coding-standards/wpcs:"^3.0"
+      - name: Install project deps (optional)
+        run: composer install --no-interaction --no-progress || true
+      - name: Run PHPCS
+        run: phpcs --standard=${{ inputs.standard }} --extensions=php .
+      - name: Summary
+        run: echo "Greg reusable review completed." >> $GITHUB_STEP_SUMMARY
