@@ -1,21 +1,10 @@
 name: Reusable Review
 on:
   workflow_call:
-    inputs:
-      php:
-        type: string
-        required: false
-        default: '8.2'
-      standard:
-        type: string
-        required: false
-        default: 'WordPress'
 
 jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout target repo
-        uses: actions/checkout@v4
-      - name: Hub version marker
-        run: echo "Hub workflow version: minimal-01"
+      - uses: actions/checkout@v4
+      - run: echo "Hub OK: minimal-00"
