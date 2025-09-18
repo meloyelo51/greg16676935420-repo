@@ -1,0 +1,11 @@
+{
+  "projects": [
+    {
+      "name": "WP AI CommerceHub",
+      "repo": "meloyelo51/wp-ai-commercehub",
+      "branch": "main",
+      "paths": ["wp-content/plugins/wp-ai-commercehub"],
+      "review_profile": "wp-plugin"
+    }
+  ]
+}
