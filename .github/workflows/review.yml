@@ -10,24 +10,32 @@ on:
         required: false
         type: string
         default: 'WordPress'
+
 jobs:
   review:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ inputs.php }}
-          tools: composer, phpcs
+          tools: composer
+
       - name: Install coding standards
         run: |
+          composer config --no-interaction allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
           composer require --no-interaction --no-progress --dev \
             dealerdirect/phpcodesniffer-composer-installer:"^1.0" \
+            squizlabs/php_codesniffer:"^3.7" \
             wp-coding-standards/wpcs:"^3.0"
+
       - name: Install project deps (optional)
         run: composer install --no-interaction --no-progress || true
-      - name: Run PHPCS
-        run: phpcs --standard=${{ inputs.standard }} --extensions=php .
+
+      - name: Run PHPCS (WordPress standard)
+        run: ./vendor/bin/phpcs --standard=${{ inputs.standard }} --extensions=php .
+
       - name: Summary
         run: echo "Greg reusable review completed." >> $GITHUB_STEP_SUMMARY
