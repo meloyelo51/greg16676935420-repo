@@ -1,4 +1,5 @@
 name: Reusable Review
+
 on:
   workflow_call:
     inputs:
@@ -14,7 +15,6 @@ on:
 jobs:
   review:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout target repo
         uses: actions/checkout@v4
@@ -30,7 +30,6 @@ jobs:
           php-version: ${{ inputs.php }}
           tools: composer
 
-      # Isolated PHPCS/WPCS toolchain (does NOT depend on project's composer.json)
       - name: Setup PHPCS toolchain
         run: |
           mkdir -p tools && cd tools
@@ -42,14 +41,12 @@ jobs:
             wp-coding-standards/wpcs:^3.0
           echo "$PWD/vendor/bin" >> $GITHUB_PATH
 
-      # Optional: if target repo has composer.json, install quietly (won't fail build)
       - name: Install project deps (optional)
         run: |
           if [ -f composer.json ]; then
             composer install --no-interaction --no-progress || true
           fi
 
-      # PHPCS on plugin only; ignore backups; never fail job so we always get a report
       - name: Run PHPCS on plugin only (never fail)
         run: |
           TARGET_PATH="wp-content/plugins/wp-ai-commercehub"
@@ -60,29 +57,6 @@ jobs:
             --report=full \
             --report-file=phpcs.txt \
             "$TARGET_PATH" || true
-
-        - name: Run PHPCS and save report (never fail)
-        run: |
-          phpcs \
-            --standard=WordPress \
-            --extensions=php \
-            --report=full \
-            --report-file=phpcs.txt \
-            . || true
-
-      - name: Append top of report to job summary
-        run: |
-          echo "### PHPCS Report (first 200 lines)" >> $GITHUB_STEP_SUMMARY
-          head -n 200 phpcs.txt >> $GITHUB_STEP_SUMMARY || echo "No report content."
-
-      - name: Upload full PHPCS report
-        uses: actions/upload-artifact@v4
-        with:
-          name: phpcs-report
-          path: phpcs.txt
-
-
-            
 
       - name: Append top of report to job summary
         run: |
