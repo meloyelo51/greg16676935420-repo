@@ -31,7 +31,7 @@ jobs:
       - name: Setup PHPCS toolchain
         run: |
           mkdir -p tools && cd tools
-          composer init -n
+          composer init -n --name temp/tools --type library
           composer require --no-interaction --no-progress --dev \
             squizlabs/php_codesniffer:^3.7 \
             dealerdirect/phpcodesniffer-composer-installer:^1.0 \
