@@ -1,0 +1,3 @@
+Patch pipeline OK
+If you can read this, unified diff apply works.
+Ì±ç
