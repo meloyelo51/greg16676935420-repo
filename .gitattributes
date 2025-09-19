@@ -1,3 +1,4 @@
+]633;E;{ echo "# Managed with Greg patch workflow"\x3b cat .gitattributes\x3b } > .gitattributes.tmp && mv .gitattributes.tmp .gitattributes;2d4bd300-7f6e-46ee-a7af-94c19f37492f]633;C# Managed with Greg patch workflow
 # Auto detect text files and perform LF normalization
 * text=auto
 
