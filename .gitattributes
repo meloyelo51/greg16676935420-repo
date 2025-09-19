@@ -13,3 +13,6 @@
 *.php text eol=lf
 *.js text eol=lf
 *.css text eol=lf
+*.ps1 text eol=lf
+*.patch text eol=lf
+*.diff  text eol=lf
