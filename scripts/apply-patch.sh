@@ -1,36 +1,58 @@
 #!/usr/bin/env bash
 set -euo pipefail
+#
+# apply-patch.sh (v2)
+# Usage:
+#   ./scripts/apply-patch.sh [PATCH_FILE] [COMMIT_MESSAGE]
+# Defaults:
+#   PATCH_FILE      = changes.patch
+#   COMMIT_MESSAGE  = Apply changes.patch
+#
+# Features:
+# - Ensures clean working tree
+# - Normalizes CRLF -> LF in the patch
+# - Ensures patch ends with a final newline
+# - Shows diffstat
+# - Applies with --whitespace=nowarn (3-way fallback)
 
-PATCH_FILE="changes.patch"
+PATCH_FILE="${1:-changes.patch}"
+MSG="${2:-Apply changes.patch}"
 
 if [[ ! -f "$PATCH_FILE" ]]; then
-  echo "changes.patch not found in repo root."
+  echo "Patch not found: $PATCH_FILE" >&2
   exit 1
 fi
 
-# Optional: branch management (commented out by default)
-# BASE_BRANCH="${BASE_BRANCH:-origin/main}"
-# WORK_BRANCH="${WORK_BRANCH:-feature/greg-work}"
-# git fetch origin
-# git checkout -B "${WORK_BRANCH}" "${BASE_BRANCH}"
-
-# Preflight
+# Clean tree check
 if [[ -n "$(git status --porcelain)" ]]; then
-  echo "Working tree not clean. Commit/stash first."
+  echo "Working tree not clean. Commit or stash first." >&2
   exit 1
 fi
 
-echo "Dry run..."
-git apply --check "$PATCH_FILE"
-
-echo "Applying patch..."
-if ! git apply --index "$PATCH_FILE"; then
-  echo "Straight apply failed; trying 3-way..."
-  git apply --3way --index "$PATCH_FILE"
+# Normalize CRLF to LF (Windows-safe)
+if grep -q $'\r' "$PATCH_FILE"; then
+  sed -i 's/\r$//' "$PATCH_FILE"
 fi
 
-MSG="${1:-Apply changes.patch}"
+# Ensure final newline at EOF
+if [[ -n "$(tail -c1 "$PATCH_FILE" || true)" ]]; then
+  printf '\n' >> "$PATCH_FILE"
+fi
+
+echo "== Diffstat =="
+git apply --stat "$PATCH_FILE" || true
+
+echo "== Dry run check =="
+git apply --check --whitespace=nowarn "$PATCH_FILE"
+
+echo "== Applying =="
+if ! git apply --index --whitespace=nowarn "$PATCH_FILE"; then
+  echo "Straight apply failed; trying 3-way..."
+  git apply --3way --index --whitespace=nowarn "$PATCH_FILE"
+fi
+
 git commit -m "$MSG"
 
-echo "Patch applied and committed."
-echo "Tip: push your current branch with: git push -u origin $(git branch --show-current)"
+BRANCH="$(git branch --show-current)"
+echo "Committed on $BRANCH"
+echo "Push with: git push -u origin \"$BRANCH\""
