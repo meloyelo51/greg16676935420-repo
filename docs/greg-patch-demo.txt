@@ -1,0 +1,12 @@
+Greg Patch Demo
+================
+
+This file was added via a unified diff patch so you can test the apply flow.
+
+How to verify:
+1) After applying the patch and committing, run:
+   - git ls-files docs/greg-patch-demo.txt
+   - git show :docs/greg-patch-demo.txt
+2) Open the file to confirm contents match.
+
+Timestamp: demo
