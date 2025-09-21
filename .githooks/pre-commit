@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Run docs checker with defaults; allow local overrides via env
+# Example to tune for a single commit:
+#   MIN_LINES=8 git commit -m "..."
+if [[ -x "scripts/check-docs.sh" ]]; then
+  scripts/check-docs.sh
+else
+  echo "warn: scripts/check-docs.sh not found; skipping docs length check."
+fi
