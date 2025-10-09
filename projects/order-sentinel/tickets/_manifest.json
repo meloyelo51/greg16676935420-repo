@@ -1,0 +1,22 @@
+{
+  "tickets": [
+    "abuseipdb-button-submits-wrong.md",
+    "abuseipdb-reporter.md",
+    "activity-line.md",
+    "baked-rest-monitor.md",
+    "blacklist-import-placement.md",
+    "checkbox-persistence-fix.md",
+    "combined-order-metabox.md",
+    "debug-page.md",
+    "full-address-fields.md",
+    "header-encoding-repairs.md",
+    "hpos-compat.md",
+    "mu-plugins-approach.md",
+    "occasional-version-packaging-drift.md",
+    "packaging-cleanup.md",
+    "quick-ban-allow.md",
+    "table-scroll-resize.md",
+    "timeframe-controls.md",
+    "ui-tabs-restored.md"
+  ]
+}
