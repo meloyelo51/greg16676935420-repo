@@ -4,7 +4,18 @@
       "name": "WP AI CommerceHub",
       "repo": "meloyelo51/wp-ai-commercehub",
       "branch": "main",
-      "paths": ["wp-content/plugins/wp-ai-commercehub"],
+      "paths": [
+        "wp-content/plugins/wp-ai-commercehub"
+      ],
+      "review_profile": "wp-plugin"
+    },
+    {
+      "name": "OrderSentinel",
+      "repo": "https://github.com/meloyelo51/wp-ordersentinel",
+      "branch": "main",
+      "paths": [
+        "order-sentinel"
+      ],
       "review_profile": "wp-plugin"
     }
   ]
