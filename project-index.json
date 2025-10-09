@@ -1,0 +1,13 @@
+{
+  "projects": [
+    {
+      "name": "OrderSentinel",
+      "repo": "https://github.com/meloyelo51/wp-ordersentinel",
+      "branch": "main",
+      "paths": [
+        "order-sentinel"
+      ],
+      "review_profile": "wp-plugin"
+    }
+  ]
+}
