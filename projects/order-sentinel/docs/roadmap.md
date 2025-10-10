@@ -9,10 +9,9 @@
 
 ## Active
 - [ ] projects/order-sentinel/tickets/combined-order-metabox.md — Single metabox with IP/XFF, OSINT links, jump links; add subtable "Latest REST hits for this IP" and last report timestamp (IN PROGRESS)
-- [ ] projects/order-sentinel/tickets/abuseipdb-reporter.md — Server-side reporter method; admin notices wired (IN PROGRESS)
 
 ## Done
-- [x] projects/order-sentinel/tickets/baked-rest-monitor.md — MU functionality baked into /includes; menu under WooCommerce (COMPLETE)
+- [x] projects/order-sentinel/tickets/abuseipdb-button-submits-wrong.md — Order screen button submits to wrong endpoint (COMPLETE)- [x] projects/order-sentinel/tickets/abuseipdb-reporter.md — Server-side reporter method; admin notices wired (COMPLETE)- [x] projects/order-sentinel/tickets/baked-rest-monitor.md — MU functionality baked into /includes; menu under WooCommerce (COMPLETE)
 - [x] projects/order-sentinel/tickets/ui-tabs-restored.md — Overview/Tools/Settings tabs visible; CSV column uses Status (COMPLETE)
 - [x] projects/order-sentinel/tickets/timeframe-controls.md — Top IPs/Routes honor window; titles reflect timeframe (COMPLETE)
 - [x] projects/order-sentinel/tickets/blacklist-import-placement.md — Import/replace UI grouped in Settings (COMPLETE)
@@ -21,7 +20,6 @@
 - [x] projects/order-sentinel/tickets/header-encoding-repairs.md — BOM/garbage stripped; header/class version bumps via one-shot (COMPLETE)
 
 ## Stuck / Broken
-- [ ] projects/order-sentinel/tickets/abuseipdb-button-submits-wrong.md — Order screen button submits to wrong endpoint (STUCK)
 - [ ] projects/order-sentinel/tickets/occasional-version-packaging-drift.md — Version mismatch / bad filenames in ZIP (STUCK)
 
 ## Paused / Removed
