@@ -21,7 +21,7 @@ As an analyst, I want to report abusive IPs to AbuseIPDB from the order screen.
 - order-sentinel/includes/osint/abuseipdb.php (if separated)
 
 ## Implementation Notes (initial)
-- Status: IN PROGRESS
+- Status: COMPLETE (Released v1.0.38 on 2025-10-09)
 - Branch: feature/abuseipdb-reporter
 - Apply method: python one-shot or save-chat-patch.sh if multi-file
 
@@ -30,3 +30,8 @@ As an analyst, I want to report abusive IPs to AbuseIPDB from the order screen.
 
 ## Minimal Test Plan
 Report test IP; verify notice and handler call.
+
+
+## Completion Notes
+- Released in **v1.0.38** (2025-10-09).
+- Verified live; handler + redirect working; nonce/caps validated.

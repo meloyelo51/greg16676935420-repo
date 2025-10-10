@@ -20,7 +20,7 @@ As an admin, I need the 'Report to AbuseIPDB' action to submit to the correct ha
 - order-sentinel/includes/...
 
 ## Implementation Notes (initial)
-- Status: STUCK
+- Status: COMPLETE (Released v1.0.38 on 2025-10-09)
 - Likely nested form issue; use formaction/formmethod, or signed GET/AJAX
 
 ## Rollback Notes
@@ -28,3 +28,8 @@ As an admin, I need the 'Report to AbuseIPDB' action to submit to the correct ha
 
 ## Minimal Test Plan
 Click report; handler runs; notice appears; URL correct.
+
+
+## Completion Notes
+- Released in **v1.0.38** (2025-10-09).
+- Verified live; handler + redirect working; nonce/caps validated.

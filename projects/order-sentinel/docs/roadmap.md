@@ -38,3 +38,8 @@
 ### Notes
 - Preferred method: Python one-shot for single files; use Python zipfile to build dist/OrderSentinel-<ver>.zip. Avoid zip CLI and PowerShell.
 - Keep main plugin minimal; logic in /includes and /assets. Primary menu under WooCommerce (fallback Tools).
+
+
+## Completed
+- **abuseipdb-button-submits-wrong** — fixed quick-report button to canonical admin-post handler; shipped **v1.0.38** (2025-10-09).
+- **abuseipdb-reporter** — server-side reporter verified live; shipped **v1.0.38** (2025-10-09).
