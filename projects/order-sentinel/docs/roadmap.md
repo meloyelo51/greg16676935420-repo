@@ -7,7 +7,7 @@
 - Paths: order-sentinel
 - Review profile: wp-plugin
 
-## Active
+\1- [ ] projects/order-sentinel/tickets/honeypot-fields.md — Configurable honeypot fields; logging + actions (IN PLANNING)
 - [ ] projects/order-sentinel/tickets/combined-order-metabox.md — Single metabox with IP/XFF, OSINT links, jump links; add subtable "Latest REST hits for this IP" and last report timestamp (IN PROGRESS)
 
 ## Done
